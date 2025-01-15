@@ -1,6 +1,7 @@
 package com.aluralatam.foro_hub.infra.security;
 
 import com.aluralatam.foro_hub.infra.security.filter.SecurityFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,6 +21,7 @@ public class SecurityConfigurations {
 
     private final SecurityFilter securityFilter;
 
+    @Autowired
     public SecurityConfigurations(SecurityFilter securityFilter){
         this.securityFilter = securityFilter;
     }
@@ -29,10 +31,9 @@ public class SecurityConfigurations {
         return httpSecurity.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) ->
-                        authorizeHttpRequests.requestMatchers(HttpMethod.POST, "/login").permitAll()
-                                .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
-                                .anyRequest()
-                                .authenticated()
+                        authorizeHttpRequests.requestMatchers(HttpMethod.POST, "/login").permitAll() // Permitir acceso a /login sin autenticación
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                                .anyRequest().authenticated() // Requerir autenticación para cualquier otra solicitud
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

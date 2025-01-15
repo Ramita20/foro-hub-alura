@@ -1,6 +1,7 @@
 package com.aluralatam.foro_hub.infra.security.autentication;
 
 import com.aluralatam.foro_hub.domain.usuario.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,6 +12,7 @@ public class AuthenticationService implements UserDetailsService {
 
     private final UsuarioRepository usuarioRepository;
 
+    @Autowired
     public AuthenticationService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
